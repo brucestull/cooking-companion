@@ -8,6 +8,10 @@ A reusable Django app you can install into another Django project (e.g. your "Pe
 - Cook results
 - Notes, images, reference URLs, and PDFs attached to any object via GenericForeignKey
 
+## Resources
+- [Cooking Companion - Pip Install](https://chatgpt.com/c/694d5974-3288-8325-8ee4-cd9a7eb19df2)
+- [Cooking Companion - Initial Models](https://chatgpt.com/c/694d4205-4990-8326-94d1-99fd41052dd3)
+
 ## Quick start (in your host Django project)
 
 ### 1) Install (editable, local dev)
