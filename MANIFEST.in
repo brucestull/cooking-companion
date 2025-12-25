@@ -1,0 +1,5 @@
+include README.md
+include LICENSE
+recursive-include cooking_companion/templates *.html
+recursive-include cooking_companion/static *.*
+recursive-include cooking_companion/migrations *.py

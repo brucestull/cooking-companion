@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% load cooking_nav %}
+{% block title %}Attachments{% endblock %}
+{% block content %}
+{% include "cooking_companion/_nav.html" %}
+<div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+  <div>
+    <h1 class="h3 mb-1">Attachments</h1>
+    <div class="text-muted small">Target: <strong>{{ target_obj }}</strong> ({{ target_model_key }})</div>
+  </div>
+  <div class="d-flex gap-2">
+    <a class="btn btn-outline-secondary" href="{{ request.META.HTTP_REFERER|default_if_none:'' }}">Back</a>
+    <div class="btn-group">
+      <a class="btn btn-primary" href="{{ add_note_url }}">+ Note</a>
+      <a class="btn btn-primary" href="{{ add_url_url }}">+ URL</a>
+      <a class="btn btn-primary" href="{{ add_image_url }}">+ Image</a>
+      <a class="btn btn-primary" href="{{ add_pdf_url }}">+ PDF</a>
+    </div>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-12 col-lg-6">
+    <div class="card shadow-sm">
+      <div class="card-header">Notes</div>
+      <div class="card-body">
+        {% if notes %}
+          <div class="list-group">
+            {% for n in notes %}
+              <div class="list-group-item">
+                <div class="d-flex justify-content-between">
+                  <strong>{{ n.title|default:"(no title)" }}</strong>
+                  {% if n.is_pinned %}<span class="badge text-bg-warning">Pinned</span>{% endif %}
+                </div>
+                <div class="small text-muted">{{ n.updated_at|date:"Y-m-d H:i" }}</div>
+                <div class="mt-2">{{ n.body|linebreaks }}</div>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="text-muted">No notes yet.</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-lg-6">
+    <div class="card shadow-sm">
+      <div class="card-header">Reference URLs</div>
+      <div class="card-body">
+        {% if urls %}
+          <div class="list-group">
+            {% for u in urls %}
+              <a class="list-group-item list-group-item-action" href="{{ u.url }}" target="_blank" rel="noopener">
+                <div class="d-flex justify-content-between">
+                  <strong>{{ u.title|default:u.url }}</strong>
+                  {% if u.is_primary %}<span class="badge text-bg-primary">Primary</span>{% endif %}
+                </div>
+                <div class="small text-muted">{{ u.get_kind_display }}</div>
+                {% if u.description %}<div class="small mt-1">{{ u.description|truncatechars:220 }}</div>{% endif %}
+              </a>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="text-muted">No URLs yet.</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-lg-6">
+    <div class="card shadow-sm">
+      <div class="card-header">Images</div>
+      <div class="card-body">
+        {% if images %}
+          <div class="row g-2">
+            {% for img in images %}
+              <div class="col-6 col-md-4">
+                <div class="border rounded p-2 h-100">
+                  {% if img.image %}
+                    <img src="{{ img.image.url }}" class="img-fluid rounded" alt="{{ img.alt_text|default:img.caption }}">
+                  {% endif %}
+                  <div class="small mt-2">
+                    {% if img.is_cover %}<span class="badge text-bg-warning">Cover</span>{% endif %}
+                    <div class="text-muted">{{ img.caption|default:"(no caption)" }}</div>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="text-muted">No images yet.</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-lg-6">
+    <div class="card shadow-sm">
+      <div class="card-header">PDF documents</div>
+      <div class="card-body">
+        {% if pdfs %}
+          <div class="list-group">
+            {% for p in pdfs %}
+              <a class="list-group-item list-group-item-action" href="{{ p.pdf.url }}" target="_blank" rel="noopener">
+                <div class="d-flex justify-content-between">
+                  <strong>{{ p.title|default:p.original_filename }}</strong>
+                  <span class="badge text-bg-secondary">{{ p.get_kind_display }}</span>
+                </div>
+                {% if p.description %}<div class="small text-muted mt-1">{{ p.description|truncatechars:220 }}</div>{% endif %}
+              </a>
+            {% endfor %}
+          </div>
+        {% else %}
+          <div class="text-muted">No PDFs yet.</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

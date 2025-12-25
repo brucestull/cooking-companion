@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load cooking_nav %}
+{% block title %}Recipes{% endblock %}
+{% block content %}
+{% include "cooking_companion/_nav.html" %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div>
+    <h1 class="h3 mb-0">Recipes</h1>
+    <div class="text-muted small">Search and favorite your go-tos.</div>
+  </div>
+  <a class="btn btn-primary" href="{% url 'cooking_companion:recipe-add' %}">+ Add Recipe</a>
+</div>
+
+<form method="get" class="row g-2 align-items-end mb-3">
+  <div class="col-12 col-md-6">
+    <label class="form-label">Search</label>
+    <input name="q" value="{{ request.GET.q }}" class="form-control" placeholder="title, author, description">
+  </div>
+  <div class="col-6 col-md-2">
+    <div class="form-check mt-4">
+      <input class="form-check-input" type="checkbox" name="favorite" value="1" {% if request.GET.favorite == "1" %}checked{% endif %}>
+      <label class="form-check-label">Favorites</label>
+    </div>
+  </div>
+  <div class="col-6 col-md-2">
+    <div class="form-check mt-4">
+      <input class="form-check-input" type="checkbox" name="active" value="0" {% if request.GET.active == "0" %}checked{% endif %}>
+      <label class="form-check-label">Show inactive</label>
+    </div>
+  </div>
+  <div class="col-12 col-md-2">
+    <button class="btn btn-primary w-100" type="submit">Filter</button>
+  </div>
+</form>
+
+{% if object_list %}
+  <div class="list-group shadow-sm">
+    {% for r in object_list %}
+      <a href="{% url 'cooking_companion:recipe-detail' r.pk %}" class="list-group-item list-group-item-action">
+        <div class="d-flex justify-content-between">
+          <strong>{{ r.title }}</strong>
+          <small class="text-muted">{{ r.updated_at|date:"Y-m-d" }}</small>
+        </div>
+        <div class="small text-muted">{% if r.author %}{{ r.author }} · {% endif %}{% if r.is_favorite %}★ Favorite · {% endif %}{% if not r.is_active %}Inactive{% endif %}</div>
+      </a>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="alert alert-info">No recipes yet.</div>
+{% endif %}
+{% include "cooking_companion/_pagination.html" %}
+{% endblock %}

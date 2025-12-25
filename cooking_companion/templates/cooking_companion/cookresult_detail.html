@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load cooking_nav %}
+{% block title %}Result{% endblock %}
+{% block content %}
+{% include "cooking_companion/_nav.html" %}
+<div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+  <div>
+    <h1 class="h3 mb-1">Result</h1>
+    <div class="text-muted small">For <a href="{% url 'cooking_companion:cooksession-detail' object.cook_session.pk %}">{{ object.cook_session }}</a></div>
+  </div>
+  <div class="d-flex gap-2">
+    <a class="btn btn-outline-secondary" href="{% url 'cooking_companion:cookresult-edit' object.cook_session.pk %}">Edit</a>
+    <a class="btn btn-primary" href="{% url 'cooking_companion:target-detail' 'cookresult' object.pk %}">Attachments</a>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-12 col-lg-4">
+    <div class="card shadow-sm">
+      <div class="card-header">Snapshot</div>
+      <div class="card-body">
+        <ul class="list-unstyled mb-0">
+          <li><strong>Outcome:</strong> {{ object.get_outcome_display }}</li>
+          <li><strong>Overall:</strong> {{ object.overall_rating|default:"—" }}</li>
+          <li><strong>Taste:</strong> {{ object.taste_rating|default:"—" }}</li>
+          <li><strong>Texture:</strong> {{ object.texture_rating|default:"—" }}</li>
+          <li><strong>Appearance:</strong> {{ object.appearance_rating|default:"—" }}</li>
+          <li><strong>Make again:</strong> {% if object.would_make_again %}Yes{% else %}No{% endif %}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-12 col-lg-8">
+    <div class="card shadow-sm">
+      <div class="card-header">Notes</div>
+      <div class="card-body">
+        <h2 class="h6">What worked</h2>
+        {% if object.what_worked %}{{ object.what_worked|linebreaks }}{% else %}<div class="text-muted">—</div>{% endif %}
+        <hr>
+        <h2 class="h6">What to change</h2>
+        {% if object.what_to_change %}{{ object.what_to_change|linebreaks }}{% else %}<div class="text-muted">—</div>{% endif %}
+        <hr>
+        <h2 class="h6">Next time plan</h2>
+        {% if object.next_time_plan %}{{ object.next_time_plan|linebreaks }}{% else %}<div class="text-muted">—</div>{% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

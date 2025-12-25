@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cooking-companion"
+version = "0.1.0"
+description = "Reusable Django app for tracking cooking (recipes, dishes, cook sessions, results) with attachable notes/images/urls/pdfs."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Tiny" }]
+dependencies = [
+  "Django>=4.2",
+  "Pillow>=10.0",
+]
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["."]

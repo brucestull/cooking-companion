@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load cooking_nav %}
+{% block title %}Recipe · {{ object.title }}{% endblock %}
+{% block content %}
+{% include "cooking_companion/_nav.html" %}
+<div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+  <div>
+    <h1 class="h3 mb-1">{{ object.title }}</h1>
+    <div class="text-muted small">{% if object.author %}By {{ object.author }} · {% endif %}Updated {{ object.updated_at|date:"Y-m-d" }}</div>
+  </div>
+  <div class="d-flex gap-2">
+    <a class="btn btn-outline-secondary" href="{% url 'cooking_companion:recipe-edit' object.pk %}">Edit</a>
+    <a class="btn btn-outline-danger" href="{% url 'cooking_companion:recipe-delete' object.pk %}">Delete</a>
+    <a class="btn btn-primary" href="{% url 'cooking_companion:target-detail' 'recipe' object.pk %}">Attachments</a>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-12 col-lg-6">
+    <div class="card shadow-sm">
+      <div class="card-header">Description</div>
+      <div class="card-body">{% if object.description %}{{ object.description|linebreaks }}{% else %}<span class="text-muted">None</span>{% endif %}</div>
+    </div>
+  </div>
+  <div class="col-12 col-lg-6">
+    <div class="card shadow-sm">
+      <div class="card-header">Timing / Yield</div>
+      <div class="card-body">
+        <ul class="list-unstyled mb-0">
+          <li><strong>Yield:</strong> {{ object.yield_text|default:"—" }}</li>
+          <li><strong>Prep:</strong> {{ object.prep_minutes|default:"—" }} min</li>
+          <li><strong>Cook:</strong> {{ object.cook_minutes|default:"—" }} min</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-12">
+    <div class="card shadow-sm">
+      <div class="card-header">Ingredients</div>
+      <div class="card-body">{% if object.ingredients %}{{ object.ingredients|linebreaks }}{% else %}<span class="text-muted">None</span>{% endif %}</div>
+    </div>
+  </div>
+  <div class="col-12">
+    <div class="card shadow-sm">
+      <div class="card-header">Instructions</div>
+      <div class="card-body">{% if object.instructions %}{{ object.instructions|linebreaks }}{% else %}<span class="text-muted">None</span>{% endif %}</div>
+    </div>
+  </div>
+</div>
+{% endblock %}

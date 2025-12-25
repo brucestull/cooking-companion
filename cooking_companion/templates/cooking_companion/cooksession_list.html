@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load cooking_nav %}
+{% block title %}Cook Sessions{% endblock %}
+{% block content %}
+{% include "cooking_companion/_nav.html" %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div>
+    <h1 class="h3 mb-0">Cook Sessions</h1>
+    <div class="text-muted small">Log each cooking event. Add a Result to track what to repeat next time.</div>
+  </div>
+  <a class="btn btn-primary" href="{% url 'cooking_companion:cooksession-add' %}">+ Add Cook Session</a>
+</div>
+
+<form method="get" class="row g-2 align-items-end mb-3">
+  <div class="col-12 col-md-6">
+    <label class="form-label">Search</label>
+    <input name="q" value="{{ request.GET.q }}" class="form-control" placeholder="dish, recipe, summary">
+  </div>
+
+  <div class="col-12 col-md-2">
+    <label class="form-label">When</label>
+    <select name="when" class="form-select">
+      <option value="">Any</option>
+      <option value="today" {% if request.GET.when == "today" %}selected{% endif %}>Today</option>
+      <option value="week" {% if request.GET.when == "week" %}selected{% endif %}>Next 7 days</option>
+      <option value="month" {% if request.GET.when == "month" %}selected{% endif %}>Next 30 days</option>
+      <option value="past30" {% if request.GET.when == "past30" %}selected{% endif %}>Past 30 days</option>
+    </select>
+  </div>
+
+  <div class="col-12 col-md-2">
+    <label class="form-label">Meal type</label>
+    <select name="meal_type" class="form-select">
+      <option value="">Any</option>
+      {% for key,label in object_list.model.MealType.choices %}
+        <option value="{{ key }}" {% if request.GET.meal_type == key %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="col-12 col-md-2">
+    <label class="form-label">Method</label>
+    <select name="method" class="form-select">
+      <option value="">Any</option>
+      {% for key,label in object_list.model.CookMethod.choices %}
+        <option value="{{ key }}" {% if request.GET.method == key %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="col-12 col-md-2">
+    <button class="btn btn-primary w-100" type="submit">Filter</button>
+  </div>
+</form>
+
+{% if object_list %}
+  <div class="list-group shadow-sm">
+    {% for s in object_list %}
+      <a href="{% url 'cooking_companion:cooksession-detail' s.pk %}" class="list-group-item list-group-item-action">
+        <div class="d-flex justify-content-between">
+          <strong>{{ s.dish }}</strong>
+          <small class="text-muted">{{ s.cooked_on }}</small>
+        </div>
+        <div class="small text-muted">{{ s.meal_type }} · {{ s.method }}{% if s.recipe_used %} · {{ s.recipe_used.title }}{% endif %}</div>
+        {% if s.summary %}<div class="small mt-1">{{ s.summary|truncatechars:160 }}</div>{% endif %}
+      </a>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="alert alert-info">No cook sessions yet.</div>
+{% endif %}
+{% include "cooking_companion/_pagination.html" %}
+{% endblock %}

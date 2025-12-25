@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load cooking_nav %}
+{% block title %}Dish · {{ object.name }}{% endblock %}
+{% block content %}
+{% include "cooking_companion/_nav.html" %}
+<div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+  <div>
+    <h1 class="h3 mb-1">{{ object.name }}</h1>
+    <div class="text-muted small">{{ object.session_count }} cook sessions</div>
+  </div>
+  <div class="d-flex gap-2">
+    <a class="btn btn-outline-secondary" href="{% url 'cooking_companion:dish-edit' object.pk %}">Edit</a>
+    <a class="btn btn-outline-danger" href="{% url 'cooking_companion:dish-delete' object.pk %}">Delete</a>
+    <a class="btn btn-primary" href="{% url 'cooking_companion:target-detail' 'dish' object.pk %}">Attachments</a>
+    <a class="btn btn-success" href="{% url 'cooking_companion:cooksession-add' %}?dish={{ object.pk }}">+ Cook Session</a>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-12 col-lg-6">
+    <div class="card shadow-sm">
+      <div class="card-header">Description</div>
+      <div class="card-body">{% if object.description %}{{ object.description|linebreaks }}{% else %}<span class="text-muted">None</span>{% endif %}</div>
+    </div>
+  </div>
+  <div class="col-12 col-lg-6">
+    <div class="card shadow-sm">
+      <div class="card-header">Defaults</div>
+      <div class="card-body">
+        <ul class="list-unstyled mb-0">
+          <li><strong>Default recipe:</strong>
+            {% if object.default_recipe %}
+              <a href="{% url 'cooking_companion:recipe-detail' object.default_recipe.pk %}">{{ object.default_recipe.title }}</a>
+            {% else %}
+              <span class="text-muted">None</span>
+            {% endif %}
+          </li>
+          <li><strong>Active:</strong> {% if object.is_active %}Yes{% else %}No{% endif %}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

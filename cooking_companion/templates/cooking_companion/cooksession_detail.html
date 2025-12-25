@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load cooking_nav %}
+{% block title %}Cook Session{% endblock %}
+{% block content %}
+{% include "cooking_companion/_nav.html" %}
+<div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+  <div>
+    <h1 class="h3 mb-1">{{ object.dish }}</h1>
+    <div class="text-muted small">{{ object.cooked_on }} · {{ object.meal_type }} · {{ object.method }}</div>
+  </div>
+  <div class="d-flex gap-2">
+    <a class="btn btn-outline-secondary" href="{% url 'cooking_companion:cooksession-edit' object.pk %}">Edit</a>
+    <a class="btn btn-outline-danger" href="{% url 'cooking_companion:cooksession-delete' object.pk %}">Delete</a>
+    <a class="btn btn-primary" href="{% url 'cooking_companion:target-detail' 'cooksession' object.pk %}">Attachments</a>
+    <a class="btn btn-success" href="{% url 'cooking_companion:cookresult-edit' object.pk %}">Edit Result</a>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-12 col-lg-6">
+    <div class="card shadow-sm">
+      <div class="card-header">Core</div>
+      <div class="card-body">
+        <ul class="list-unstyled mb-0">
+          <li><strong>Dish:</strong> <a href="{% url 'cooking_companion:dish-detail' object.dish.pk %}">{{ object.dish }}</a></li>
+          <li><strong>Recipe used:</strong>
+            {% if object.recipe_used %}
+              <a href="{% url 'cooking_companion:recipe-detail' object.recipe_used.pk %}">{{ object.recipe_used.title }}</a>
+            {% else %}
+              <span class="text-muted">None</span>
+            {% endif %}
+          </li>
+          <li><strong>Servings:</strong> {{ object.servings_made|default:"—" }}</li>
+          <li><strong>Duration:</strong> {{ object.duration_minutes|default:"—" }} min</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-lg-6">
+    <div class="card shadow-sm">
+      <div class="card-header">Summary</div>
+      <div class="card-body">{% if object.summary %}{{ object.summary|linebreaks }}{% else %}<span class="text-muted">None</span>{% endif %}</div>
+    </div>
+  </div>
+
+  <div class="col-12">
+    <div class="card shadow-sm">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <span>Result</span>
+        <a class="btn btn-sm btn-success" href="{% url 'cooking_companion:cookresult-edit' object.pk %}">Edit Result</a>
+      </div>
+      <div class="card-body">
+        {% if object.result %}
+          <div class="row g-3">
+            <div class="col-12 col-lg-3"><div class="p-3 border rounded"><div class="text-muted">Outcome</div><div class="h5 mb-0">{{ object.result.get_outcome_display }}</div></div></div>
+            <div class="col-12 col-lg-3"><div class="p-3 border rounded"><div class="text-muted">Overall</div><div class="h5 mb-0">{{ object.result.overall_rating|default:"—" }}</div></div></div>
+            <div class="col-12 col-lg-3"><div class="p-3 border rounded"><div class="text-muted">Make again</div><div class="h5 mb-0">{% if object.result.would_make_again %}Yes{% else %}No{% endif %}</div></div></div>
+            <div class="col-12">
+              <a class="btn btn-outline-primary" href="{% url 'cooking_companion:cookresult-detail' object.result.pk %}">View full result</a>
+            </div>
+          </div>
+        {% else %}
+          <div class="alert alert-info mb-0">No result yet.</div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

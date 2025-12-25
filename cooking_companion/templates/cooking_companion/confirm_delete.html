@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load cooking_nav %}
+{% block content %}
+{% include "cooking_companion/_nav.html" %}
+<div class="card shadow-sm border-danger">
+  <div class="card-body">
+    <h1 class="h4 text-danger">Confirm delete</h1>
+    <p>Are you sure you want to delete <strong>{{ object }}</strong>?</p>
+    <form method="post">
+      {% csrf_token %}
+      <div class="d-flex gap-2">
+        <button class="btn btn-danger" type="submit">Yes, delete</button>
+        <a class="btn btn-outline-secondary" href="{{ request.META.HTTP_REFERER|default_if_none:'' }}">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

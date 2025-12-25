@@ -1,0 +1,31 @@
+{% load cooking_nav %}
+<nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom mb-4">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="{% url 'cooking_companion:dashboard' %}">Cooking Companion</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#ccNavbar" aria-controls="ccNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="ccNavbar">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link {% cc_nav_active 'cooking_companion:dashboard' %}" href="{% url 'cooking_companion:dashboard' %}">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% cc_nav_active 'cooking_companion:recipe-list' %}" href="{% url 'cooking_companion:recipe-list' %}">Recipes</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% cc_nav_active 'cooking_companion:dish-list' %}" href="{% url 'cooking_companion:dish-list' %}">Dishes</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link {% cc_nav_active 'cooking_companion:cooksession-list' %}" href="{% url 'cooking_companion:cooksession-list' %}">Cook Sessions</a>
+        </li>
+      </ul>
+      <div class="d-flex gap-2">
+        <a class="btn btn-sm btn-outline-primary" href="{% url 'cooking_companion:recipe-add' %}">+ Recipe</a>
+        <a class="btn btn-sm btn-outline-primary" href="{% url 'cooking_companion:dish-add' %}">+ Dish</a>
+        <a class="btn btn-sm btn-primary" href="{% url 'cooking_companion:cooksession-add' %}">+ Cook Session</a>
+      </div>
+    </div>
+  </div>
+</nav>
